@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { API_OPTIONS } from '../Utils/Constants';
 import { MovieContext } from '../contexts/selectedMovieContext';
 import LOGO from "../assets/LOGO.png"
+import ReactPlayer from 'react-player';
 
 const MovieInfo = () => {
     const { selectedMovie, setSelectedMovie } = useContext(MovieContext);
@@ -68,20 +69,15 @@ const MovieInfo = () => {
         <div className='w-[100vw] h-[100vh] flex flex-col bg-gray-900 px-6 min-h-screen'>
             {/* header section */}
             <Link to="/browse">
-                <img className="w-40 h-32" src={LOGO} alt="Logo" />
+                <img className="w-40 h-32 absolute top-0" src={LOGO} alt="Logo" />
             </Link>
-            <div className='flex w-full h-full justify-between'>
+            <div className='flex w-full h-full justify-between mt-24'>
                 {/* Left Section */}
                 <div className='flex flex-col w-[65%] overflow-y-scroll mb-28 no-scrollbar'>
                     {/* Trailer Section */}
-                    <div className='w-full h-[450px]'>
+                    <div className='w-full h-[550px]'>
                         {key ? (
-                            <iframe
-                                className="w-full h-[450px] rounded-lg shadow-lg"
-                                src={`https://www.youtube.com/embed/${key}?autoplay=1&mute=0&enablejsapi=1&controls=1&picture-in-picture=0&encrypted-media=0&rel=0&loop=1`}
-                                title={title}
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            />
+                            <ReactPlayer url={`https://www.youtube.com/watch?v=${key}`} playing loop width={1000} height={500} />
                         ) : (
                             <div className="text-white text-center">No trailer available</div>
                         )}

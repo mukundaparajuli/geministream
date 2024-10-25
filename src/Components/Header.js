@@ -35,7 +35,7 @@ const Header = () => {
   return (
     <div>
       <Link to="/browse">
-        <img className="w-40 h-32" src={LOGO} alt="Logo" />
+        <img className="w-40 h-32 top-0 absolute" src={LOGO} alt="Logo" />
       </Link>
     </div>
   );
