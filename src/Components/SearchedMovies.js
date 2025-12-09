@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import SearchedMovieList from "./SearchedMovieList";
 import { useSelector } from "react-redux";
 
 const SearchedMovies = ({ title }) => {
   const movie = useSelector((store) => store.gptSearchSlice.movieResults);
 
+  if (!movie || movie.length === 0) {
+    return null;
+  }
+
   return (
-    <div
-      className="overflow-auto w-full fixed bottom-0 transition-all duration-500 h-[80%]"
-    >
-      <SearchedMovieList movieInfo={movie} />
-    </div>
+    <SearchedMovieList movieInfo={movie} />
   );
 };
 

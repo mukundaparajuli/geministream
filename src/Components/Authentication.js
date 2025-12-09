@@ -104,51 +104,63 @@ const Authentication = () => {
       />
       <div className="absolute inset-0 bg-black opacity-50"></div>
       <Header />
-      <div className="absolute w-full h-full flex justify-center items-center">
-        <div className="w-[90%] md:w-3/12 bg-black h-auto rounded-lg opacity-90 p-5">
-          <h1 className="text-white text-4xl font-semibold">
+      <div className="absolute w-full h-full flex justify-center items-center px-4">
+        <div className="w-full max-w-md bg-black/90 rounded-lg p-6 md:p-8 shadow-2xl">
+          <h1 className="text-white text-2xl md:text-3xl font-semibold mb-8 text-center">
             {isSignedIn ? "Sign In" : "Sign Up"}
           </h1>
-          {!isSignedIn && (
+
+          <form onSubmit={(e) => { e.preventDefault(); handleAuthentication(); }} className="space-y-4">
+            {!isSignedIn && (
+              <input
+                className="w-full p-3 md:p-4 bg-gray-700 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-600"
+                type="text"
+                ref={name}
+                placeholder="Full Name"
+                required
+              />
+            )}
+
             <input
-              className="p-3 m-5 w-5/6 bg-gray-600 rounded-md text-white"
-              type="text"
-              ref={name}
-              placeholder="Full Name"
+              className="w-full p-3 md:p-4 bg-gray-700 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-600"
+              type="email"
+              ref={email}
+              placeholder="Email Address"
+              required
             />
-          )}
-          <input
-            className="p-3 m-5 w-5/6 bg-gray-600 rounded-md text-white"
-            type="email"
-            ref={email}
-            placeholder="Email Address"
-          />
-          <input
-            className="p-3 m-5 w-5/6 bg-gray-600 rounded-md text-white"
-            type="password"
-            ref={password}
-            placeholder="Password"
-          />
-          {errorMessage && (
-            <p className="text-red-600 font-semibold text-lg mx-5">
-              {errorMessage}
-            </p>
-          )}
-          <button
-            className="p-3 m-5 w-5/6 bg-red-600 text-white font-semibold rounded-md"
-            onClick={handleAuthentication}
-          >
-            {isSignedIn ? "Sign In" : "Sign Up"}
-          </button>
-          <div className="text-white m-5">
-            {isSignedIn ? "Not registered yet? " : "Already have an account? "}
+
+            <input
+              className="w-full p-3 md:p-4 bg-gray-700 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-600"
+              type="password"
+              ref={password}
+              placeholder="Password"
+              required
+            />
+
+            {errorMessage && (
+              <p className="text-red-500 font-semibold text-sm bg-red-900/50 p-3 rounded-md">
+                {errorMessage}
+              </p>
+            )}
+
             <button
-              className="text-red-600"
+              type="submit"
+              className="w-full p-3 md:p-4 bg-red-600 text-white font-semibold rounded-md hover:bg-red-700 transition-colors focus:outline-none focus:ring-2 focus:ring-red-600"
+            >
+              {isSignedIn ? "Sign In" : "Sign Up"}
+            </button>
+          </form>
+
+          <div className="text-white text-center mt-6">
+            <span className="text-gray-400">
+              {isSignedIn ? "New to GeminiStream? " : "Already have an account? "}
+            </span>
+            <button
+              className="text-red-400 hover:text-red-300 font-semibold ml-1"
               onClick={handleSignInSignUp}
             >
               {isSignedIn ? "Sign Up" : "Sign In"}
-            </button>{" "}
-            now!
+            </button>
           </div>
         </div>
       </div>

@@ -1,50 +1,90 @@
 import React, { useContext } from "react";
 import { MOVIE_IMAGE_CDN } from "../Utils/Constants";
-import useMovieTrailer from "../Hooks/useMovieTrailer";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { MovieContext } from "../contexts/selectedMovieContext";
+import { Play, Info } from "lucide-react";
 
-const MovieCard = (movie) => {
-  const { backdrop_path, title, name, overview, poster_path, id } = movie;
-  const trailerVideo = useMovieTrailer({ id });
+const SearchedMovieCard = ({
+  backdrop_path,
+  title,
+  name,
+  overview,
+  poster_path,
+  id,
+  vote_average,
+  release_date,
+  ...movie
+}) => {
   const { setSelectedMovie } = useContext(MovieContext);
-  console.log(trailerVideo);
-  if (!(backdrop_path || poster_path || trailerVideo)) return null;
+  const navigate = useNavigate();
 
-  // handle movie selection
-  const handleMovieSeletion = () => {
+  if (!(backdrop_path || poster_path)) return null;
+
+  const handleMovieSelection = () => {
     setSelectedMovie(movie);
-  }
+    navigate(`/browse/${id}`);
+  };
+
+  const displayTitle = title || name;
+  const imageUrl = MOVIE_IMAGE_CDN + (backdrop_path || poster_path);
+  const truncatedOverview =
+    overview?.length > 150 ? overview.slice(0, 150) + "..." : overview;
+
   return (
-    <div className="flex justify-evenly shadow-gray-300 shadow-sm p-1 overflow-auto">
-      <div className="m-8 w-1/3">
+    <div
+      className="group bg-gray-900 rounded-lg shadow-lg hover:shadow-xl transition-all hover:scale-105 cursor-pointer"
+      onClick={handleMovieSelection}
+    >
+      {/* Movie Image */}
+      <div className="relative">
         <img
-          className="h-48 w-full object-cover"  // Set fixed height with object-cover for maintaining aspect ratio
-          src={MOVIE_IMAGE_CDN + (backdrop_path || poster_path)}
-          alt=""
+          className="w-full h-64 object-cover"
+          src={imageUrl}
+          alt={displayTitle}
+          loading="lazy"
         />
+
+        {/* Overlay Play Button */}
+        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all flex items-center justify-center ">
+          <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-red-600 text-white px-4 py-2 rounded-full flex items-center gap-2">
+            <Play size={18} />
+            <span>Play</span>
+          </div>
+        </div>
+
+        {/* Rating */}
+        {vote_average && (
+          <div className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-sm font-medium">
+            ⭐ {vote_average.toFixed(1)}
+          </div>
+        )}
       </div>
-      <div className="h-[30vh] w-1/3 flex items-center no-scrollbar overflow-scroll">
-        <div className="overflow-y-auto">
-          {title ? (
-            <h1 className="font-bold no-scrollbar text-lg md:text-4xl mb-2 h-[25%] text-white flex ">
-              {title}
-            </h1>
-          ) : (
-            <h1 className="font-bold no-scrollbar text-lg md:text-4xl mb-2 h-[25%] text-white flex ">
-              {name}
-            </h1>
-          )}
-          <p className="overflow-hidden text-white text-[12px] h-[75%] z-10 text-justify md:text-md ">
-            {overview}
+
+      {/* Movie Info */}
+      <div className="p-4 bg-white">
+        <h3 className="text-gray-900 font-semibold text-lg truncate">
+          {displayTitle}
+        </h3>
+
+        {release_date && (
+          <p className="text-gray-600 text-sm mb-2">
+            {new Date(release_date).getFullYear()}
           </p>
-          <Link to={`/browse/${id}`} >
-            <button className="text-orange-500 p-5 " onClick={() => handleMovieSeletion()}>  Movie Info</button>
-          </Link>
+        )}
+
+        {truncatedOverview && (
+          <p className="text-gray-700 text-sm line-clamp-3 mb-3">
+            {truncatedOverview}
+          </p>
+        )}
+
+        <div className="inline-flex items-center gap-1 text-red-600 hover:text-red-500 text-sm font-medium">
+          <Info size={16} />
+          More Info
         </div>
       </div>
-    </div >
+    </div>
   );
 };
 
-export default MovieCard;
+export default SearchedMovieCard;
